@@ -22,6 +22,10 @@ jobs:
         docker build --tag ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:${{github.sha}} .
         docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:${{github.sha}}
 
+        sed -i'' -e 's/DOCKER_USERNAME/${{ secrets.DOCKER_USERNAME }}/g' -e 's/K8S_URL/${{ secrets.K8S_URL }}/g' -e 's/IMAGE_LABEL/${{ github.sha }}/g' k8s.yaml
+        
+        kubectl apply -f k8s.yaml
+
     # - name: Set up JDK 1.8
     #   uses: actions/setup-java@v1
     #   with:
